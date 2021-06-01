@@ -41,9 +41,11 @@ namespace Net5_Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Net5_Api v1"));
+                app.UseSwaggerUI(c => {
+                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Net5_Api v1");
+                     c.RoutePrefix = string.Empty;
+                 });
             }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
