@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Net5_Api.Controllers.Model;
+using Net5_Api.DTOs.Diretor;
 
 namespace Net5_Api.Controllers
 {
@@ -34,23 +35,27 @@ namespace Net5_Api.Controllers
 
         // POST api/diretores
         [HttpPost]
-        public async Task<ActionResult<Diretor>> Post([FromBody] Diretor diretor)
+        public async Task<ActionResult<DiretorOutputPostDTO>> Post([FromBody] DiretorInputPostDTO diretorInputPostDto)
         {
+            var diretor = new Diretor(diretorInputPostDto.Nome);
             _context.Diretores.Add(diretor);
+
             await _context.SaveChangesAsync();
 
-            return Ok(diretor);
+            var diretorOutputDto = new DiretorOutputPostDTO(diretor.Id, diretor.Nome);
+            return Ok(diretorOutputDto);
         }
 
         // PUT api/diretores/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<Diretor>> Put(long id, [FromBody] Diretor diretor)
+        public async Task<ActionResult<DiretorOutPutPutDTO>> Put(long id, [FromBody] DiretorInputPutDTO diretorInputPutDTO)
         {
+            var diretor  = new Diretor(diretorInputPutDTO.nome);
             diretor.Id = id;
             _context.Diretores.Update(diretor);
             await _context.SaveChangesAsync();
-
-            return Ok(diretor);
+            var diretorOutPutDTO = new DiretorOutPutPutDTO(diretor.Id, diretor.Nome);
+            return Ok(diretorOutPutDTO);
         }
 
         // DELETE api/diretores/{id}
