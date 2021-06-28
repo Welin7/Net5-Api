@@ -20,17 +20,26 @@ namespace Net5_Api.Controllers
 
         // GET api/diretores
         [HttpGet]
-        public async Task<List<Diretor>> Get()
+        public async Task<List<DiretorOutputGetAlllDTO>> Get()
         {
-            return await _context.Diretores.ToListAsync();
+            var diretores = await _context.Diretores.ToListAsync();
+            var outputDTOList = new List<DiretorOutputGetAlllDTO>();
+
+            foreach(Diretor diretor in diretores)
+            {
+                outputDTOList.Add(new DiretorOutputGetAlllDTO(diretor.Id,diretor.Nome));
+            }
+
+            return outputDTOList;
         }
 
         // GET api/diretores/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Diretor>> Get(long id)
+        public async Task<ActionResult<DiretorOutputGetByIdDTO>> Get(long id)
         {
             var diretor = await _context.Diretores.FirstOrDefaultAsync(diretor => diretor.Id == id);
-            return Ok(diretor);
+            var outputDTO = new DiretorOutputGetByIdDTO(diretor.Id,diretor.Nome);
+            return Ok(outputDTO);
         }
 
         // POST api/diretores
