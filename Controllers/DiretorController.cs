@@ -50,7 +50,7 @@ namespace Net5_Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<DiretorOutPutPutDTO>> Put(long id, [FromBody] DiretorInputPutDTO diretorInputPutDTO)
         {
-            var diretor  = new Diretor(diretorInputPutDTO.nome);
+            var diretor  = new Diretor(diretorInputPutDTO.Nome);
             diretor.Id = id;
             _context.Diretores.Update(diretor);
             await _context.SaveChangesAsync();
