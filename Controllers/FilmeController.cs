@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Net5_Api.Controllers.Model;
+using Net5_Api.DTOs.Filme;
 
 namespace Net5_Api.Controllers
 {
@@ -19,17 +20,26 @@ namespace Net5_Api.Controllers
 
         // GET api/filmes
         [HttpGet]
-        public async Task<List<Filme>> Get()
+        public async Task<List<FilmeOutputGetAllDTO>> Get()
         {
-            return await _context.Filmes.ToListAsync();
+            var filmes = await _context.Filmes.ToListAsync();
+            var outputDTOList = new List<FilmeOutputGetAllDTO>();
+
+            foreach(Filme filme in filmes)
+            {
+                outputDTOList.Add(new FilmeOutputGetAllDTO(filme.Id,filme.Titulo, filme.Ano));
+            }
+
+            return outputDTOList;
         }
 
         // GET api/filmes/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Filme>> Get(long id)
+        public async Task<ActionResult<FilmeOutputGetByIdDTO>> Get(long id)
         {
-            var filme = await _context.Filmes.FirstOrDefaultAsync(filme => filme.Id == id);
-            return Ok(filme);
+            var filme = await _context.Filmes.Include(filme => filme.Diretor).FirstOrDefaultAsync(filme => filme.Id == id);
+            var outputDTO = new FilmeOutputGetByIdDTO(filme.Id,filme.Titulo, filme.Diretor.Nome);
+            return Ok(outputDTO);
         }
 
         // POST api/filmes
