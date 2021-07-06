@@ -55,6 +55,8 @@ namespace Net5_Api
 
             app.UseAuthorization();
 
+            app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
