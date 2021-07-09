@@ -75,7 +75,7 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do diretor</param>
+        /// <param name="id">Id do diretor</param>
         /// <returns>Registro do diretor informado como parâmetro</returns>
         /// <response code="200">Diretor localizado sucesso</response>
 
@@ -104,12 +104,11 @@ namespace Net5_Api.Controllers
         ///
         ///     POST/diretor
         ///     {
-        ///        "id": 8,
-        ///        "nome": "Tim Burton"
+        ///        "nome": "Tim Burton",
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Nome do diretor</param>
+        /// <param name="diretorInputPostDto">Nome do diretor</param>
         /// <returns>O diretor cadastrado no banco</returns>
         /// <response code="200">Diretor criado com sucesso</response>
 
@@ -141,7 +140,8 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do diretor</param>
+        /// <param name="diretorInputPutDTO">Nome do diretor</param>
+        /// <param name="id">Id do diretor</param>
         /// <returns>O diretor atualizado no banco</returns>
         /// <response code="200">Diretor atualizado com sucesso</response>
 
@@ -173,7 +173,7 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do diretor</param>
+        /// <param name="id">Id do diretor</param>
         /// <returns>O diretor excluido</returns>
         /// <response code="200">Diretor removido com sucesso</response>
 

@@ -78,7 +78,7 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do filme</param>
+        /// <param name="id">Id do filme</param>
         /// <returns>Registro do filme informado como parâmetro</returns>
         /// <response code="200">Filme localizado sucesso</response>
 
@@ -112,7 +112,7 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Titulo do filme e id do diretor</param>
+        /// <param name="inputDTO">Titulo do filme e id do diretor</param>
         /// <returns>O filme cadastrado no banco</returns>
         /// <response code="200">Filme criado com sucesso</response>
 
@@ -151,7 +151,8 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do filme</param>
+        /// <param name="id">Id do filme</param>
+        /// <param name="inputDTO">Titulo do filme</param>
         /// <returns>O filme atualizado no banco</returns>
         /// <response code="200">Filme atualizado com sucesso</response>
 
@@ -194,7 +195,7 @@ namespace Net5_Api.Controllers
         ///     } 
         ///       
         /// </remarks>
-        /// <param name="nome">Id do filme</param>
+        /// <param name="id">Id do filme</param>
         /// <returns>O filme excluido</returns>
         /// <response code="200">Filme removido com sucesso</response>
 
