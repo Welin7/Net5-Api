@@ -20,6 +20,26 @@ namespace Net5_Api.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// O método Get retorna uma lista de todos os diretores do banco.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET/diretor
+        ///     {
+        ///        "id": 1,
+        ///        "nome": "James Cameron"
+        ///     },
+        ///     {
+        ///        "id": 2,
+        ///        "nome": "Benito Deltoro"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <returns>Todos os diretores já cadastrados no banco</returns>
+        /// <response code="200">Diretores listados com sucesso</response>
+
         // GET api/diretores
         [HttpGet]
         public async Task<ActionResult<List<DiretorOutputGetAlllDTO>>> Get()
@@ -42,6 +62,23 @@ namespace Net5_Api.Controllers
 
         }
 
+        /// <summary>
+        /// O método Get retorna um registro do diretor de acordo com o parâmetro id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET/diretor/id
+        ///     {
+        ///        "id": 2,
+        ///        "nome": "Benito Deltoro"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do diretor</param>
+        /// <returns>Registro do diretor informado como parâmetro</returns>
+        /// <response code="200">Diretor localizado sucesso</response>
+
         // GET api/diretores/1
         [HttpGet("{id}")]
         public async Task<ActionResult<DiretorOutputGetByIdDTO>> Get(long id)
@@ -59,6 +96,23 @@ namespace Net5_Api.Controllers
 
         }
 
+        /// <summary>
+        /// O método Post registra um diretor no banco de acordo com o nome informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST/diretor
+        ///     {
+        ///        "id": 8,
+        ///        "nome": "Tim Burton"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Nome do diretor</param>
+        /// <returns>O diretor cadastrado no banco</returns>
+        /// <response code="200">Diretor criado com sucesso</response>
+
         // POST api/diretores
         [HttpPost]
         public async Task<ActionResult<DiretorOutputPostDTO>> Post([FromBody] DiretorInputPostDTO diretorInputPostDto)
@@ -74,6 +128,23 @@ namespace Net5_Api.Controllers
 
         }
 
+        /// <summary>
+        /// O método Put atualiza o nome do diretor no banco de acordo com o id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT/diretor/id
+        ///     {
+        ///        "id": 5,
+        ///        "nome": "Bernardo Bertolucci Atualizado"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do diretor</param>
+        /// <returns>O diretor atualizado no banco</returns>
+        /// <response code="200">Diretor atualizado com sucesso</response>
+
         // PUT api/diretores/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult<DiretorOutPutPutDTO>> Put(long id, [FromBody] DiretorInputPutDTO diretorInputPutDTO)
@@ -87,6 +158,24 @@ namespace Net5_Api.Controllers
             return Ok(diretorOutPutDTO);
 
         }
+
+        /// <summary>
+        /// O método Delete remove um diretor no banco de acordo com o id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE/diretor/id
+        ///     {
+        ///        "id": 7,
+        ///        "nome": "Michael Mann",
+        ///        "filmes": []
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do diretor</param>
+        /// <returns>O diretor excluido</returns>
+        /// <response code="200">Diretor removido com sucesso</response>
 
         // DELETE api/diretores/{id}
         [HttpDelete("{id}")]

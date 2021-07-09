@@ -20,6 +20,28 @@ namespace Net5_Api.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// O método Get retorna uma lista de todos os filmes do banco.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET/filme
+        ///     {
+        ///        "id": 2,
+        ///        "titulo": "Titanic",
+        ///        "ano": null
+        ///     },
+        ///     {
+        ///        "id": 3,
+        ///        "titulo": "Et O Extraterrestre",
+        ///        "ano": null
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <returns>Todos os filmes já cadastrados no banco</returns>
+        /// <response code="200">Filmes listados com sucesso</response>
+
         // GET api/filmes
         [HttpGet]
         public async Task<ActionResult<List<FilmeOutputGetAllDTO>>> Get()
@@ -42,6 +64,24 @@ namespace Net5_Api.Controllers
 
         }
 
+        /// <summary>
+        /// O método Get retorna um registro do filme de acordo com o parâmetro id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET/filme/id
+        ///     {
+        ///        "id": 2,
+        ///        "titulo": "Et O Extraterrestre",
+        ///        "nomeDoDiretor": "Steven Spielberg"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do filme</param>
+        /// <returns>Registro do filme informado como parâmetro</returns>
+        /// <response code="200">Filme localizado sucesso</response>
+
         // GET api/filmes/1
         [HttpGet("{id}")]
         public async Task<ActionResult<FilmeOutputGetByIdDTO>> Get(long id)
@@ -58,6 +98,23 @@ namespace Net5_Api.Controllers
             return Ok(outputDTO);
 
         }
+
+        /// <summary>
+        /// O método Post registra um filme no banco de acordo com o nome informado e id do diretor.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST/filme
+        ///     {
+        ///        "titulo": "Et O Extraterrestre",
+        ///        "diretorId": 3
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Titulo do filme e id do diretor</param>
+        /// <returns>O filme cadastrado no banco</returns>
+        /// <response code="200">Filme criado com sucesso</response>
 
         // POST api/filmes
         [HttpPost]
@@ -81,6 +138,23 @@ namespace Net5_Api.Controllers
 
         }
 
+        /// <summary>
+        /// O método Put atualiza o id do filme, titulo e id do diretor no banco de acordo com o id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT/filme/id
+        ///     {
+        ///        "id": 2,
+        ///        "titulo": "O Ultimo dos Moicanos"
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do filme</param>
+        /// <returns>O filme atualizado no banco</returns>
+        /// <response code="200">Filme atualizado com sucesso</response>
+
         // PUT api/filmes/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult<FilmeOutputPutDTO>> Put(int id, [FromBody] FilmeInputPutDTO inputDTO)
@@ -102,6 +176,27 @@ namespace Net5_Api.Controllers
             return Ok(outputDTO);
 
         }
+
+        /// <summary>
+        /// O método Delete remove um filme no banco de acordo com o id informado.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE/filme/id
+        ///     {
+        ///        "id": 2,
+        ///        "titulo": "O Ultimo dos Moicanos",
+        ///        "ano": null,
+        ///        "genero": null,
+        ///        "diretorId": 1,
+        ///        "diretor": null
+        ///     } 
+        ///       
+        /// </remarks>
+        /// <param name="nome">Id do filme</param>
+        /// <returns>O filme excluido</returns>
+        /// <response code="200">Filme removido com sucesso</response>
 
         // DELETE api/filmes/{id}
         [HttpDelete("{id}")]
