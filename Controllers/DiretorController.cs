@@ -111,7 +111,8 @@ namespace Net5_Api.Controllers
         /// <param name="diretorInputPostDto">Nome do diretor</param>
         /// <returns>O diretor cadastrado no banco</returns>
         /// <response code="200">Diretor criado com sucesso</response>
-
+        /// <response code="500">Erro interno inesperado</response>
+        
         // POST api/diretores
         [HttpPost]
         public async Task<ActionResult<DiretorOutputPostDTO>> Post([FromBody] DiretorInputPostDTO diretorInputPostDto)

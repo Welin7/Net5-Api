@@ -115,7 +115,8 @@ namespace Net5_Api.Controllers
         /// <param name="inputDTO">Titulo do filme e id do diretor</param>
         /// <returns>O filme cadastrado no banco</returns>
         /// <response code="200">Filme criado com sucesso</response>
-
+        /// <response code="500">Erro interno inesperado</response>
+        
         // POST api/filmes
         [HttpPost]
         public async Task<ActionResult<FilmeOutputPostDTO>> Post([FromBody] FilmeInputPostDTO inputDTO)
