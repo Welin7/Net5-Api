@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using FluentValidation.AspNetCore;
 
 namespace Net5_Api
 {
@@ -28,7 +29,10 @@ namespace Net5_Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(options => {
+                options.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Net5_Api", Version = "v1" });

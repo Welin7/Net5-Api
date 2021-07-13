@@ -112,6 +112,7 @@ namespace Net5_Api.Controllers
         /// <returns>O diretor cadastrado no banco</returns>
         /// <response code="200">Diretor criado com sucesso</response>
         /// <response code="500">Erro interno inesperado</response>
+        /// <response code="400">Erro de validação</response>
         
         // POST api/diretores
         [HttpPost]
