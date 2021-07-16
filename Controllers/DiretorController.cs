@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Net5_Api.Controllers.Model;
 using Net5_Api.DTOs.Diretor;
 using System.Linq;
-using System;
+using Net5_Api.Services;
 
 namespace Net5_Api.Controllers
 {
@@ -13,11 +12,11 @@ namespace Net5_Api.Controllers
     [Route("[controller]")]
     public class DiretorController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDiretorService _DiretorService;
 
-        public DiretorController(ApplicationDbContext context)
+        public DiretorController(IDiretorService DiretorService)
         {
-            _context = context;
+            _DiretorService = DiretorService;
         }
 
         /// <summary>
@@ -44,8 +43,7 @@ namespace Net5_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DiretorOutputGetAlllDTO>>> Get()
         {
-
-            var diretores = await _context.Diretores.ToListAsync();
+            var diretores = await _DiretorService.GetAll();
             var outputDTOList = new List<DiretorOutputGetAlllDTO>();
 
             foreach (Diretor diretor in diretores)
@@ -59,7 +57,6 @@ namespace Net5_Api.Controllers
             }
 
             return outputDTOList;
-
         }
 
         /// <summary>
@@ -83,8 +80,7 @@ namespace Net5_Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DiretorOutputGetByIdDTO>> Get(long id)
         {
-
-            var diretor = await _context.Diretores.FirstOrDefaultAsync(diretor => diretor.Id == id);
+            var diretor = await _DiretorService.GetById(id);
 
             if (diretor == null)
             {
@@ -93,7 +89,6 @@ namespace Net5_Api.Controllers
 
             var outputDTO = new DiretorOutputGetByIdDTO(diretor.Id, diretor.Nome);
             return Ok(outputDTO);
-
         }
 
         /// <summary>
@@ -113,20 +108,16 @@ namespace Net5_Api.Controllers
         /// <response code="200">Diretor criado com sucesso</response>
         /// <response code="500">Erro interno inesperado</response>
         /// <response code="400">Erro de validação</response>
-        
+
         // POST api/diretores
         [HttpPost]
         public async Task<ActionResult<DiretorOutputPostDTO>> Post([FromBody] DiretorInputPostDTO diretorInputPostDto)
         {
-
             var diretor = new Diretor(diretorInputPostDto.Nome);
-            _context.Diretores.Add(diretor);
-
-            await _context.SaveChangesAsync();
+            await _DiretorService.Add(diretor);
 
             var diretorOutputDto = new DiretorOutputPostDTO(diretor.Id, diretor.Nome);
             return Ok(diretorOutputDto);
-
         }
 
         /// <summary>
@@ -151,14 +142,12 @@ namespace Net5_Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<DiretorOutPutPutDTO>> Put(long id, [FromBody] DiretorInputPutDTO diretorInputPutDTO)
         {
-
             var diretor = new Diretor(diretorInputPutDTO.Nome);
             diretor.Id = id;
-            _context.Diretores.Update(diretor);
-            await _context.SaveChangesAsync();
+            await _DiretorService.Update(diretor);
+
             var diretorOutPutDTO = new DiretorOutPutPutDTO(diretor.Id, diretor.Nome);
             return Ok(diretorOutPutDTO);
-
         }
 
         /// <summary>
@@ -183,12 +172,8 @@ namespace Net5_Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {
-
-            var diretor = await _context.Diretores.FirstOrDefaultAsync(diretor => diretor.Id == id);
-            _context.Remove(diretor);
-            await _context.SaveChangesAsync();
+            var diretor = await _DiretorService.Delete(id);
             return Ok(diretor);
-
         }
     }
 }

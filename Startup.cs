@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using FluentValidation.AspNetCore;
+using Net5_Api.Services;
 
 namespace Net5_Api
 {
@@ -29,6 +30,8 @@ namespace Net5_Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApplicationDbContext>(Configuration);
+            services.AddTransient<IDiretorService, DiretorService>();
             services.AddControllers().AddFluentValidation(options => {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
