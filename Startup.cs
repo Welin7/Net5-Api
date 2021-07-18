@@ -32,7 +32,9 @@ namespace Net5_Api
         {
             services.Configure<ApplicationDbContext>(Configuration);
             services.AddTransient<IDiretorService, DiretorService>();
-            services.AddControllers().AddFluentValidation(options => {
+            services.AddTransient<IFilmeService, FilmeService>();
+            services.AddControllers().AddFluentValidation(options =>
+            {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
 

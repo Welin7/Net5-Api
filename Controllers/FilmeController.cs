@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Net5_Api.Controllers.Model;
 using Net5_Api.DTOs.Filme;
+using Net5_Api.Services;
 
 namespace Net5_Api.Controllers
 {
@@ -13,11 +13,11 @@ namespace Net5_Api.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IFilmeService _FilmeService;
 
-        public FilmeController(ApplicationDbContext context)
+        public FilmeController(IFilmeService FilmeService)
         {
-            _context = context;
+            _FilmeService = FilmeService;
         }
 
         /// <summary>
@@ -46,8 +46,7 @@ namespace Net5_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<FilmeOutputGetAllDTO>>> Get()
         {
-
-            var filmes = await _context.Filmes.ToListAsync();
+            var filmes = await _FilmeService.GetAll();
             var outputDTOList = new List<FilmeOutputGetAllDTO>();
 
             foreach (Filme filme in filmes)
@@ -61,7 +60,6 @@ namespace Net5_Api.Controllers
             }
 
             return outputDTOList;
-
         }
 
         /// <summary>
@@ -86,8 +84,7 @@ namespace Net5_Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<FilmeOutputGetByIdDTO>> Get(long id)
         {
-
-            var filme = await _context.Filmes.Include(filme => filme.Diretor).FirstOrDefaultAsync(filme => filme.Id == id);
+            var filme = await _FilmeService.GetById(id);
 
             if (filme == null)
             {
@@ -96,7 +93,6 @@ namespace Net5_Api.Controllers
 
             var outputDTO = new FilmeOutputGetByIdDTO(filme.Id, filme.Titulo, filme.Diretor.Nome);
             return Ok(outputDTO);
-
         }
 
         /// <summary>
@@ -116,13 +112,12 @@ namespace Net5_Api.Controllers
         /// <returns>O filme cadastrado no banco</returns>
         /// <response code="200">Filme criado com sucesso</response>
         /// <response code="500">Erro interno inesperado</response>
-        
+
         // POST api/filmes
         [HttpPost]
         public async Task<ActionResult<FilmeOutputPostDTO>> Post([FromBody] FilmeInputPostDTO inputDTO)
         {
-
-            var diretor = await _context.Diretores.FirstOrDefaultAsync(diretor => diretor.Id == inputDTO.DiretorId);
+            var diretor = await _FilmeService.GetDiretorId(inputDTO.DiretorId);
 
             if (diretor == null)
             {
@@ -130,13 +125,11 @@ namespace Net5_Api.Controllers
             }
 
             var filme = new Filme(inputDTO.Titulo, diretor.Id);
-            _context.Filmes.Add(filme);
-            await _context.SaveChangesAsync();
+            await _FilmeService.Add(filme);
 
             var outputDTO = new FilmeOutputPostDTO(filme.Id, filme.Titulo);
 
             return Ok(outputDTO);
-
         }
 
         /// <summary>
@@ -161,7 +154,6 @@ namespace Net5_Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<FilmeOutputPutDTO>> Put(int id, [FromBody] FilmeInputPutDTO inputDTO)
         {
-
             var filme = new Filme(inputDTO.Titulo, inputDTO.DiretorId);
 
             if (inputDTO.DiretorId == 0)
@@ -170,13 +162,10 @@ namespace Net5_Api.Controllers
             }
 
             filme.Id = id;
-            _context.Filmes.Update(filme);
-            await _context.SaveChangesAsync();
+            await _FilmeService.Update(filme);
 
             var outputDTO = new FilmeOutputPutDTO(filme.Id, filme.Titulo);
-
             return Ok(outputDTO);
-
         }
 
         /// <summary>
@@ -204,12 +193,8 @@ namespace Net5_Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {
-
-            var filme = await _context.Filmes.FirstOrDefaultAsync(filme => filme.Id == id);
-            _context.Remove(filme);
-            await _context.SaveChangesAsync();
+            var filme = await _FilmeService.Delete(id);
             return Ok(filme);
-
         }
     }
 }
