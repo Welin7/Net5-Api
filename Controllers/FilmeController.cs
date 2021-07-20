@@ -13,11 +13,11 @@ namespace Net5_Api.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private readonly IFilmeService _FilmeService;
+        private readonly IFilmeService _filmeService;
 
         public FilmeController(IFilmeService FilmeService)
         {
-            _FilmeService = FilmeService;
+            _filmeService = FilmeService;
         }
 
         /// <summary>
@@ -46,17 +46,12 @@ namespace Net5_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<FilmeOutputGetAllDTO>>> Get()
         {
-            var filmes = await _FilmeService.GetAll();
+            var filmes = await _filmeService.GetAll();
             var outputDTOList = new List<FilmeOutputGetAllDTO>();
 
             foreach (Filme filme in filmes)
             {
                 outputDTOList.Add(new FilmeOutputGetAllDTO(filme.Id, filme.Titulo, filme.Ano));
-            }
-
-            if (!outputDTOList.Any())
-            {
-                return NotFound("Não existem filmes cadastrados!");
             }
 
             return outputDTOList;
@@ -84,12 +79,7 @@ namespace Net5_Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<FilmeOutputGetByIdDTO>> Get(long id)
         {
-            var filme = await _FilmeService.GetById(id);
-
-            if (filme == null)
-            {
-                throw new ArgumentNullException("Filme não encontrado!");
-            }
+            var filme = await _filmeService.GetById(id);
 
             var outputDTO = new FilmeOutputGetByIdDTO(filme.Id, filme.Titulo, filme.Diretor.Nome);
             return Ok(outputDTO);
@@ -117,18 +107,12 @@ namespace Net5_Api.Controllers
         [HttpPost]
         public async Task<ActionResult<FilmeOutputPostDTO>> Post([FromBody] FilmeInputPostDTO inputDTO)
         {
-            var diretor = await _FilmeService.GetDiretorId(inputDTO.DiretorId);
-
-            if (diretor == null)
-            {
-                return NotFound("Diretor informado não encontrado!");
-            }
+            var diretor = await _filmeService.GetDiretorId(inputDTO.DiretorId);
 
             var filme = new Filme(inputDTO.Titulo, diretor.Id);
-            await _FilmeService.Add(filme);
+            await _filmeService.Add(filme);
 
             var outputDTO = new FilmeOutputPostDTO(filme.Id, filme.Titulo);
-
             return Ok(outputDTO);
         }
 
@@ -155,14 +139,7 @@ namespace Net5_Api.Controllers
         public async Task<ActionResult<FilmeOutputPutDTO>> Put(int id, [FromBody] FilmeInputPutDTO inputDTO)
         {
             var filme = new Filme(inputDTO.Titulo, inputDTO.DiretorId);
-
-            if (inputDTO.DiretorId == 0)
-            {
-                return NotFound("Id informado não existe para atualização!");
-            }
-
-            filme.Id = id;
-            await _FilmeService.Update(filme);
+            await _filmeService.Update(filme, inputDTO.DiretorId, id);
 
             var outputDTO = new FilmeOutputPutDTO(filme.Id, filme.Titulo);
             return Ok(outputDTO);
@@ -193,7 +170,7 @@ namespace Net5_Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {
-            var filme = await _FilmeService.Delete(id);
+            var filme = await _filmeService.Delete(id);
             return Ok(filme);
         }
     }

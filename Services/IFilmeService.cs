@@ -11,6 +11,6 @@ namespace Net5_Api.Services
         Task<List<Filme>> GetAll();
         Task<Filme> GetById(long id);
         Task<Diretor> GetDiretorId(long id);
-        Task<Filme> Update(Filme filme);
+        Task<Filme> Update(Filme filme, long idDiretor, int idFilme);
     }
 }

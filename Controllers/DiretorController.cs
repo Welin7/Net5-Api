@@ -12,11 +12,11 @@ namespace Net5_Api.Controllers
     [Route("[controller]")]
     public class DiretorController : ControllerBase
     {
-        private readonly IDiretorService _DiretorService;
+        private readonly IDiretorService _diretorService;
 
         public DiretorController(IDiretorService DiretorService)
         {
-            _DiretorService = DiretorService;
+            _diretorService = DiretorService;
         }
 
         /// <summary>
@@ -43,17 +43,12 @@ namespace Net5_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DiretorOutputGetAlllDTO>>> Get()
         {
-            var diretores = await _DiretorService.GetAll();
+            var diretores = await _diretorService.GetAll();
             var outputDTOList = new List<DiretorOutputGetAlllDTO>();
 
             foreach (Diretor diretor in diretores)
             {
                 outputDTOList.Add(new DiretorOutputGetAlllDTO(diretor.Id, diretor.Nome));
-            }
-
-            if (!outputDTOList.Any())
-            {
-                return NotFound("Não existem diretores cadastrados!");
             }
 
             return outputDTOList;
@@ -80,13 +75,7 @@ namespace Net5_Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DiretorOutputGetByIdDTO>> Get(long id)
         {
-            var diretor = await _DiretorService.GetById(id);
-
-            if (diretor == null)
-            {
-                return NotFound("Não existem diretores cadastrados!");
-            }
-
+            var diretor = await _diretorService.GetById(id);
             var outputDTO = new DiretorOutputGetByIdDTO(diretor.Id, diretor.Nome);
             return Ok(outputDTO);
         }
@@ -114,7 +103,7 @@ namespace Net5_Api.Controllers
         public async Task<ActionResult<DiretorOutputPostDTO>> Post([FromBody] DiretorInputPostDTO diretorInputPostDto)
         {
             var diretor = new Diretor(diretorInputPostDto.Nome);
-            await _DiretorService.Add(diretor);
+            await _diretorService.Add(diretor);
 
             var diretorOutputDto = new DiretorOutputPostDTO(diretor.Id, diretor.Nome);
             return Ok(diretorOutputDto);
@@ -143,8 +132,8 @@ namespace Net5_Api.Controllers
         public async Task<ActionResult<DiretorOutPutPutDTO>> Put(long id, [FromBody] DiretorInputPutDTO diretorInputPutDTO)
         {
             var diretor = new Diretor(diretorInputPutDTO.Nome);
-            diretor.Id = id;
-            await _DiretorService.Update(diretor);
+
+            await _diretorService.Update(diretor, id);
 
             var diretorOutPutDTO = new DiretorOutPutPutDTO(diretor.Id, diretor.Nome);
             return Ok(diretorOutPutDTO);
@@ -172,7 +161,7 @@ namespace Net5_Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(long id)
         {
-            var diretor = await _DiretorService.Delete(id);
+            var diretor = await _diretorService.Delete(id);
             return Ok(diretor);
         }
     }
