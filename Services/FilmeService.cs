@@ -1,8 +1,12 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Net5_Api.Controllers.Model;
+using Net5_Api.DTOs.Filme;
+using Net5_Api.Extensions;
+
 
 namespace Net5_Api.Services
 {
@@ -14,16 +18,26 @@ namespace Net5_Api.Services
             _context = context;
         }
 
-        public async Task<List<Filme>> GetAll()
+        public async Task<FilmeListOutputGetAllDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
         {
-            var filmes = await _context.Filmes.ToListAsync();
+            var pagedModel = await _context.Filmes
+                    .AsNoTracking()
+                    .OrderBy(p => p.Id)
+                    .PaginateAsync(page, limit, cancellationToken);
 
-            if (!filmes.Any())
+            if (!pagedModel.Items.Any())
             {
-                throw new System.Exception("Não existem filmes cadastrados!");
+                throw new Exception("Não existem filmes cadastrados!");
             }
 
-            return filmes;
+            var CurrentPage = pagedModel.CurrentPage;
+            var TotalPages = pagedModel.TotalPages;
+            var TotalItems = pagedModel.TotalItems;
+            var Items = pagedModel.Items.Select(filme => new FilmeOutputGetAllDTO(filme.Id, filme.Titulo, filme.Ano)).ToList();
+
+            FilmeListOutputGetAllDTO listOutputGetAllDTO = new FilmeListOutputGetAllDTO(CurrentPage, TotalPages, TotalItems, Items);
+
+            return listOutputGetAllDTO;
         }
 
         public async Task<Filme> GetById(long id)

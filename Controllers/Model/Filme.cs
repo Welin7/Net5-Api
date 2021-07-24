@@ -13,7 +13,13 @@ namespace Net5_Api.Controllers.Model
         {
             this.Titulo = titulo;
             DiretorId = diretorId;
+        }
 
+        public Filme(string titulo, long diretorId, string ano)
+        {
+            this.Titulo = titulo;
+            DiretorId = diretorId;
+            this.Ano = ano;
         }
     }
 }

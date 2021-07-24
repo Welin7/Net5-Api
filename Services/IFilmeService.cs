@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Net5_Api.Controllers.Model;
+using Net5_Api.DTOs.Filme;
 
 namespace Net5_Api.Services
 {
@@ -8,7 +9,7 @@ namespace Net5_Api.Services
     {
         Task<Filme> Add(Filme filme);
         Task<Filme> Delete(long id);
-        Task<List<Filme>> GetAll();
+        Task<FilmeListOutputGetAllDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken);
         Task<Filme> GetById(long id);
         Task<Diretor> GetDiretorId(long id);
         Task<Filme> Update(Filme filme, long idDiretor, int idFilme);

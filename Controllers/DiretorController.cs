@@ -5,6 +5,7 @@ using Net5_Api.Controllers.Model;
 using Net5_Api.DTOs.Diretor;
 using System.Linq;
 using Net5_Api.Services;
+using System.Threading;
 
 namespace Net5_Api.Controllers
 {
@@ -41,17 +42,9 @@ namespace Net5_Api.Controllers
 
         // GET api/diretores
         [HttpGet]
-        public async Task<ActionResult<List<DiretorOutputGetAlllDTO>>> Get()
+        public async Task<ActionResult<DiretorListOutputGetAllDTO>> Get(CancellationToken cancellationToken, int limit = 5, int page = 1)
         {
-            var diretores = await _diretorService.GetAll();
-            var outputDTOList = new List<DiretorOutputGetAlllDTO>();
-
-            foreach (Diretor diretor in diretores)
-            {
-                outputDTOList.Add(new DiretorOutputGetAlllDTO(diretor.Id, diretor.Nome));
-            }
-
-            return outputDTOList;
+            return await _diretorService.GetByPageAsync(limit, page, cancellationToken);
         }
 
         /// <summary>

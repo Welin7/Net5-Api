@@ -1,8 +1,12 @@
-using System.Collections.Generic;
 using Net5_Api.Controllers.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using Net5_Api.DTOs.Diretor;
+using System;
+using Net5_Api.Extensions;
+
 
 namespace Net5_Api.Services
 {
@@ -14,19 +18,27 @@ namespace Net5_Api.Services
             _context = context;
         }
 
-        public async Task<List<Diretor>> GetAll()
+        public async Task<DiretorListOutputGetAllDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
         {
-            var diretores = await _context.Diretores.ToListAsync();
+            var pagedModel = await _context.Diretores
+                    .AsNoTracking()
+                    .OrderBy(p => p.Id)
+                    .PaginateAsync(page, limit, cancellationToken);
 
-            if (!diretores.Any())
+            if (!pagedModel.Items.Any())
             {
-                throw new System.Exception("Não existem diretores cadastrados!");
+                throw new Exception("Não existem diretores cadastrados!");
             }
 
-            return diretores;
+            var CurrentPage = pagedModel.CurrentPage;
+            var TotalPages = pagedModel.TotalPages;
+            var TotalItems = pagedModel.TotalItems;
+            var Items = pagedModel.Items.Select(diretor => new DiretorOutputGetAllDTO(diretor.Id, diretor.Nome)).ToList();
 
+            DiretorListOutputGetAllDTO listOutputGetAllDTO = new DiretorListOutputGetAllDTO(CurrentPage, TotalPages, TotalItems, Items);
+
+            return listOutputGetAllDTO;
         }
-
         public async Task<Diretor> GetById(long id)
         {
             var diretor = await _context.Diretores.FirstOrDefaultAsync(diretor => diretor.Id == id);

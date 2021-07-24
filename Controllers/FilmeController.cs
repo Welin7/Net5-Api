@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Net5_Api.Controllers.Model;
@@ -44,17 +42,9 @@ namespace Net5_Api.Controllers
 
         // GET api/filmes
         [HttpGet]
-        public async Task<ActionResult<List<FilmeOutputGetAllDTO>>> Get()
+        public async Task<ActionResult<FilmeListOutputGetAllDTO>> Get(CancellationToken cancellationToken, int limit = 5, int page = 1)
         {
-            var filmes = await _filmeService.GetAll();
-            var outputDTOList = new List<FilmeOutputGetAllDTO>();
-
-            foreach (Filme filme in filmes)
-            {
-                outputDTOList.Add(new FilmeOutputGetAllDTO(filme.Id, filme.Titulo, filme.Ano));
-            }
-
-            return outputDTOList;
+            return await _filmeService.GetByPageAsync(limit, page, cancellationToken);
         }
 
         /// <summary>
@@ -109,10 +99,10 @@ namespace Net5_Api.Controllers
         {
             var diretor = await _filmeService.GetDiretorId(inputDTO.DiretorId);
 
-            var filme = new Filme(inputDTO.Titulo, diretor.Id);
+            var filme = new Filme(inputDTO.Titulo, diretor.Id, inputDTO.Ano);
             await _filmeService.Add(filme);
 
-            var outputDTO = new FilmeOutputPostDTO(filme.Id, filme.Titulo);
+            var outputDTO = new FilmeOutputPostDTO(filme.Id, filme.Titulo, filme.Ano);
             return Ok(outputDTO);
         }
 
