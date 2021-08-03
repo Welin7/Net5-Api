@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Net5_Api.Controllers.Model;
 using Net5_Api.DTOs.Diretor;
-using System.Linq;
 using Net5_Api.Services;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Net5_Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DiretorController : ControllerBase
