@@ -124,6 +124,8 @@ namespace Net5_Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
