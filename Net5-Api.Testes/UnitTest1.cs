@@ -1,4 +1,5 @@
 using System;
+using Net5_Api.Controllers.Model;
 using Xunit;
 
 namespace Net5_Api.Testes
@@ -6,15 +7,10 @@ namespace Net5_Api.Testes
     public class UnitTest1
     {
         [Fact]
-
-        public void QuandoPassarDoisEDoisOResultadoTemQueSerQuatro()
+        public void CriaUmDiretor()
         {
-            Assert.Equal(4, Add(2, 2));
-        }
-
-        int Add(int x, int y)
-        {
-            return x + y;
+            var diretor = new Diretor("Spike Lee");
+            Assert.Equal("Spike Lee", diretor.Nome);
         }
     }
 }
