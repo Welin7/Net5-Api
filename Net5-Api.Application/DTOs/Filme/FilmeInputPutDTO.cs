@@ -2,12 +2,10 @@ namespace Net5_Api.DTOs.Filme
 {
     public class FilmeInputPutDTO
     {
-        public long Id { get; set; }
         public string Titulo { get; set; }
         public long DiretorId { get; set; }
-        public FilmeInputPutDTO(long id, string titulo, long diretorId)
+        public FilmeInputPutDTO(string titulo, long diretorId)
         {
-            Id = id;
             Titulo = titulo;
             DiretorId = diretorId;
         }

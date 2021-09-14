@@ -129,9 +129,10 @@ namespace Net5_Api.Controllers
         public async Task<ActionResult<FilmeOutputPutDTO>> Put(int id, [FromBody] FilmeInputPutDTO inputDTO)
         {
             var filme = new Filme(inputDTO.Titulo, inputDTO.DiretorId);
-            await _filmeService.Update(filme, inputDTO.DiretorId, id);
+            
+            var filmeChanged = await _filmeService.Update(filme, id);
 
-            var outputDTO = new FilmeOutputPutDTO(filme.Id, filme.Titulo);
+            var outputDTO = new FilmeOutputPutDTO(filmeChanged.Id, filmeChanged.Titulo);
             return Ok(outputDTO);
         }
 

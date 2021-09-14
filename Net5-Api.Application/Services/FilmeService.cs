@@ -66,22 +66,43 @@ namespace Net5_Api.Services
 
         public async Task<Filme> Add(Filme filme)
         {
+            var diretor = _context.Diretores.FirstOrDefault(diretor => diretor.Id == filme.DiretorId);
+            
+            if (diretor == null) 
+            {
+                throw new Exception("Diretor não encontrado!");
+            }
+            
             _context.Filmes.Add(filme);
+            
             await _context.SaveChangesAsync();
+            
             return filme;
         }
 
-        public async Task<Filme> Update(Filme filme, long idDiretor, int idFilme)
+        public async Task<Filme> Update(Filme filme, long id)
         {
-            if (idDiretor == 0)
+            var diretor = _context.Diretores.FirstOrDefault(diretor => diretor.Id == filme.DiretorId);
+            
+            if (diretor == null)
             {
-                throw new System.Exception("Id informado não existe para atualização!");
+                throw new System.Exception("Diretor não encontrado!");
             }
 
-            filme.Id = idFilme;
-            _context.Filmes.Update(filme);
+            var filmeNoDb = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            
+            if (filmeNoDb == null) 
+            {
+               throw new Exception("Filme não encontrado!");
+            }
+           
+            filmeNoDb.Titulo = filme.Titulo;
+            filmeNoDb.DiretorId = filme.DiretorId;
+
+            _context.Filmes.Update(filmeNoDb);
             await _context.SaveChangesAsync();
-            return filme;
+
+            return filmeNoDb;
         }
 
         public async Task<Filme> Delete(long id)

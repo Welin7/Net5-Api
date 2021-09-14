@@ -12,6 +12,6 @@ namespace Net5_Api.Services
         Task<FilmeListOutputGetAllDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken);
         Task<Filme> GetById(long id);
         Task<Diretor> GetDiretorId(long id);
-        Task<Filme> Update(Filme filme, long idDiretor, int idFilme);
+        Task<Filme> Update(Filme filme, long id);
     }
 }
